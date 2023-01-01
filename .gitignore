@@ -1,0 +1,6 @@
+.DS_Store
+build
+dist
+src/cir_model.egg-info
+.coverage
+__pycache__

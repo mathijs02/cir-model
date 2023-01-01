@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.black]
+line-length = 79
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--cov=cir_model --cov-fail-under=100"
+filterwarnings = ["error::DeprecationWarning"]
+
+[tool.mypy]
+ignore_missing_imports = true
+
+[tool.pylint.'MESSAGES CONTROL']
+disable = "C0103,R0914,C0114,E0401,W1203"
+recursive = "y"
