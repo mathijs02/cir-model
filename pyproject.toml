@@ -14,5 +14,5 @@ filterwarnings = ["error::DeprecationWarning"]
 ignore_missing_imports = true
 
 [tool.pylint.'MESSAGES CONTROL']
-disable = "C0103,R0914,C0114,E0401,W1203"
+disable = "C0103,R0914,C0114,E0401,W1203,W0102"
 recursive = "y"
