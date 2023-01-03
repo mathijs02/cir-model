@@ -1,4 +1,4 @@
-[![](https://img.shields.io/pypi/v/cir-model)](https://pypi.org/project/cir-model/)
+[![](https://img.shields.io/pypi/v/cir-model)](https://pypi.org/project/cir-model/) [![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](https://github.com/mathijs02/cir-model/blob/main/LICENSE.txt)
 
 # Introduction
 The `cir-model` library implements the *Centered Isotonic Regression* (CIR) model.[1] CIR is a variant of [Isotonic Regression](https://en.wikipedia.org/wiki/Isotonic_regression) (IR), which is a nonparametric regression model which only assumes that the data generating function is monotonically increasing or decreasing. The function can take any monotonic form that minimizes the sum of squared errors. [`scikit-learn`](https://scikit-learn.org/stable/) has implemented Isotonic Regression as [`IsotonicRegression`](https://scikit-learn.org/stable/modules/generated/sklearn.isotonic.IsotonicRegression.html).[2]
@@ -18,7 +18,7 @@ pip install -U cir-model
 
 # Examples
 To fit a CIR model:
-```
+```python
 >>> from cir_model import CenteredIsotonicRegression
 >>> x = [1, 2, 3, 4]
 >>> y = [1, 37, 42, 5]
@@ -28,7 +28,7 @@ array([ 1. , 14.5, 28. , 28. ])
 ```
 
 Finding the inverse of the CIR model above, for example for the value `x` for which `y=25`:
-```
+```python
 >>> from scipy import optimize
 >>> optimize.newton(lambda x: model.transform([x]) - 25, 2)
 array([2.77777778])

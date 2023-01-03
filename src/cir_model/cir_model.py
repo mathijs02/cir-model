@@ -2,7 +2,7 @@
 This module contains the CenteredIsotonicRegression class.
 """
 
-from typing import List, Optional, Tuple, Union
+from typing import Any, List, Optional, Tuple, Union
 
 import numpy as np
 from sklearn.isotonic import IsotonicRegression
@@ -19,10 +19,22 @@ class CenteredIsotonicRegression(IsotonicRegression):
     therefore compatible with the other components of the `scikit-learn`
     library, like for example pipelines.
 
+    Parameters
+    ----------
     This class takes the same parameters and has the same attributes as
     `IsotonicRegression` from `scikit-learn`.[2]_ For full documentation of
     `IsotonicRegression`, see:
     https://scikit-learn.org/stable/modules/generated/sklearn.isotonic.IsotonicRegression.html
+
+    CenteredIsotonicRegression takes one additional parameter:
+
+    non_centered_points : list, default: [0, 1]
+        A list of y values that should not be collapsed in the CIR algorithm.
+        In the original CIR algorithm, y values of 0 and 1 are treated
+        differently by not collapsing them. This is because CIR is typically
+        used for a binary target variable. The default behaviour can be
+        overruled by passing a list of values for `non_centered_points`. An
+        empty list means that no points are treated differently.
 
     References
     ----------
@@ -42,6 +54,14 @@ class CenteredIsotonicRegression(IsotonicRegression):
     >>> model.transform(x)
     array([ 1. , 21. , 32. , 37.5])
     """
+
+    def __init__(
+        self,
+        non_centered_points: List[Union[float, int]] = [0, 1],
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(**kwargs)
+        self.non_centered_points = non_centered_points
 
     def fit(
         self,
@@ -91,7 +111,8 @@ class CenteredIsotonicRegression(IsotonicRegression):
           point with as x-coordinate the weighted average of the training
           datapoints within the constant range.
         * In the CIR paper, ranges with constant values of 0 or 1 are not
-          collapsed. This logic is replicated here.
+          collapsed. This implementation takes the non-collapsible points as a
+          parameter.
         * The original range of IR is kept in CIR. This means that ranges of
           constant values can appear at the edges of the function's domain.
         """
@@ -117,8 +138,8 @@ class CenteredIsotonicRegression(IsotonicRegression):
             x_step = X_arr[idx]
             x_mean = np.average(x_step, weights=sample_weight_arr[idx])
 
-            # Points with values of 0 or 1 are not collapsed in CIR
-            if y_step in [0, 1]:
+            # Points that should not be collapsed
+            if y_step in self.non_centered_points:
                 points_new.extend([(x_step[0], y_step), (x_step[-1], y_step)])
             # Ensure that the original range is maintained
             elif n == 0:
